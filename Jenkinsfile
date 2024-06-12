@@ -1,7 +1,6 @@
 pipeline {
     agent any
 
-
     stages {
         stage('Clean Workspace') {
             steps {
@@ -22,7 +21,7 @@ pipeline {
                 script {
                     dir('simple-web-app') {
                         // Use NodeJS plugin to set the Node version
-                        nodejs {
+                        nodejs(nodeJSInstallationName: 'Node-22.2.0') {
                             sh 'npm install'
                         }
                     }
@@ -34,7 +33,7 @@ pipeline {
             steps {
                 script {
                     dir('simple-web-app') {
-                        nodejs {
+                        nodejs(nodeJSInstallationName: 'Node-22.2.0') {
                             sh 'npm test'
                         }
                     }
@@ -46,7 +45,7 @@ pipeline {
             steps {
                 script {
                     dir('simple-web-app/client') {
-                        nodejs {
+                        nodejs(nodeJSInstallationName: 'Node-22.2.0') {
                             sh 'npm install'
                         }
                     }
@@ -58,7 +57,7 @@ pipeline {
             steps {
                 script {
                     dir('simple-web-app/client') {
-                        nodejs {
+                        nodejs(nodeJSInstallationName: 'Node-22.2.0') {
                             sh 'npm test'
                         }
                     }
@@ -70,7 +69,7 @@ pipeline {
             steps {
                 script {
                     dir('simple-web-app/client') {
-                        nodejs {
+                        nodejs(nodeJSInstallationName: 'Node-22.2.0') {
                             sh 'npm run build'
                         }
                     }
