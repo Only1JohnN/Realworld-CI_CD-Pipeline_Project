@@ -13,6 +13,7 @@ pipeline {
             steps {
                 // Checkout the code from the current branch
                 checkout scm
+                echo 'Checked out source code from SCM' // Added echo statement
             }
         }
         
@@ -93,4 +94,3 @@ pipeline {
         }
     }
 }
-no
