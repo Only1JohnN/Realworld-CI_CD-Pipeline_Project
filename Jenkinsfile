@@ -19,8 +19,8 @@ pipeline {
         stage('Software Version') {
             steps {
                 // Checking for the software version set Globally 
-                sh 'echo "My node Version is: $(node --version)"'
-                sh 'echo "My npm version is: $(npm --version)"'
+                sh 'echo "My node Version is: $(/usr/local/opt/node@20/bin/node --version)"'
+                sh 'echo "My npm version is: $(/usr/local/opt/node@20/bin/npm --version)"'
             }
         }
         
@@ -30,7 +30,7 @@ pipeline {
                     dir('simple-web-app') {
                         // Use NodeJS plugin to set the Node version
                         nodejs('Node-20.14.0') {
-                            sh 'npm install'
+                            sh '/usr/local/opt/node@20/bin/npm install'
                         }
                     }
                 }
@@ -42,7 +42,7 @@ pipeline {
                 script {
                     dir('simple-web-app') {
                         nodejs('Node-20.14.0') {
-                            sh 'npm test'
+                            sh '/usr/local/opt/node@20/bin/npm test'
                         }
                     }
                 }
@@ -54,7 +54,7 @@ pipeline {
                 script {
                     dir('simple-web-app/client') {
                         nodejs('Node-20.14.0') {
-                            sh 'npm install'
+                            sh '/usr/local/opt/node@20/bin/npm install'
                         }
                     }
                 }
@@ -66,7 +66,7 @@ pipeline {
                 script {
                     dir('simple-web-app/client') {
                         nodejs('Node-20.14.0') {
-                            sh 'npm test'
+                            sh '/usr/local/opt/node@20/bin/npm test'
                         }
                     }
                 }
@@ -78,7 +78,7 @@ pipeline {
                 script {
                     dir('simple-web-app/client') {
                         nodejs('Node-20.14.0') {
-                            sh 'npm run build'
+                            sh '/usr/local/opt/node@20/bin/npm run build'
                         }
                     }
                 }
