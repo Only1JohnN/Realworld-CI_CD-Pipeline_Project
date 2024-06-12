@@ -7,7 +7,7 @@ pipeline {
                 deleteDir() // Clean workspace before each build
             }
         }
-        
+
         stage('Checkout') {
             steps {
                 // Checkout the code from the current branch
@@ -15,13 +15,13 @@ pipeline {
                 echo 'Checked out source code from SCM' // Added echo statement
             }
         }
-        
+
         stage('Install Backend Dependencies') {
             steps {
                 script {
                     dir('simple-web-app') {
                         // Use NodeJS plugin to set the Node version
-                        nodejs(nodeJSInstallationName: 'Node-22.2.0') {
+                        nodejs(nodeJSInstallationName: 'Node-20.14.0') {
                             sh 'npm install'
                         }
                     }
@@ -33,7 +33,7 @@ pipeline {
             steps {
                 script {
                     dir('simple-web-app') {
-                        nodejs(nodeJSInstallationName: 'Node-22.2.0') {
+                        nodejs(nodeJSInstallationName: 'Node-20.14.0') {
                             sh 'npm test'
                         }
                     }
@@ -45,7 +45,7 @@ pipeline {
             steps {
                 script {
                     dir('simple-web-app/client') {
-                        nodejs(nodeJSInstallationName: 'Node-22.2.0') {
+                        nodejs(nodeJSInstallationName: 'Node-20.14.0') {
                             sh 'npm install'
                         }
                     }
@@ -57,7 +57,7 @@ pipeline {
             steps {
                 script {
                     dir('simple-web-app/client') {
-                        nodejs(nodeJSInstallationName: 'Node-22.2.0') {
+                        nodejs(nodeJSInstallationName: 'Node-20.14.0') {
                             sh 'npm test'
                         }
                     }
@@ -69,7 +69,7 @@ pipeline {
             steps {
                 script {
                     dir('simple-web-app/client') {
-                        nodejs(nodeJSInstallationName: 'Node-22.2.0') {
+                        nodejs(nodeJSInstallationName: 'Node-20.14.0') {
                             sh 'npm run build'
                         }
                     }
