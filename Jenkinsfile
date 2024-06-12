@@ -3,6 +3,12 @@ pipeline {
 
 
     stages {
+        stage('Clean Workspace') {
+            steps {
+                deleteDir() // Clean workspace before each build
+            }
+        }
+        
         stage('Checkout') {
             steps {
                 // Checkout the code from the current branch
