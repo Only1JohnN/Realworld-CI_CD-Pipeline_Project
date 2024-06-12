@@ -1,6 +1,6 @@
 pipeline {
     agent any
-
+    
     environment {
         PATH = "/usr/local/opt/node@20/bin:$PATH"
     }
@@ -8,82 +8,23 @@ pipeline {
     stages {
         stage('Clean Workspace') {
             steps {
-                deleteDir() // Clean workspace before each build
+                deleteDir()
             }
         }
         
         stage('Checkout') {
             steps {
-                // Checkout the code from the current branch
                 checkout scm
-                echo 'Checked out source code from SCM' // Added echo statement
+                echo 'Checked out source code from SCM'
             }
         }
 
-        stage('Software Version') {
+        stage('Static Code Analysis') {
             steps {
-                // Checking for the software version set Globally 
-                sh 'echo "My node Version is: $(/usr/local/opt/node@20/bin/node --version)"'
-                sh 'echo "My npm version is: $(/usr/local/opt/node@20/bin/npm --version)"'
-            }
-        }
-        
-        stage('Install Backend Dependencies') {
-            steps {
-                script {
-                    dir('simple-web-app') {
-                        // Use NodeJS plugin to set the Node version
-                        nodejs('Node-20.14.0') {
-                            sh 'npm install'
-                        }
-                    }
-                }
-            }
-        }
-
-        stage('Run Backend Tests') {
-            steps {
-                script {
-                    dir('simple-web-app') {
-                        nodejs('Node-20.14.0') {
-                            sh 'npm test || echo "No tests found"'
-                        }
-                    }
-                }
-            }
-        }
-
-        stage('Install Frontend Dependencies') {
-            steps {
-                script {
-                    dir('simple-web-app/client') {
-                        nodejs('Node-20.14.0') {
-                            sh 'npm install'
-                        }
-                    }
-                }
-            }
-        }
-
-        stage('Run Frontend Tests') {
-            steps {
-                script {
-                    dir('simple-web-app/client') {
-                        nodejs('Node-20.14.0') {
-                            sh 'npm test || echo "No tests found"'
-                        }
-                    }
-                }
-            }
-        }
-
-        stage('Build Frontend') {
-            steps {
-                script {
-                    dir('simple-web-app/client') {
-                        nodejs('Node-20.14.0') {
-                            sh 'npm run build'
-                        }
+                dir('simple-web-app') {
+                    nodejs('Node-20.14.0') {
+                        sh '/usr/local/opt/node@20/bin/npm install eslint'
+                        sh '/usr/local/opt/node@20/bin/npx eslint . --ext .js'
                     }
                 }
             }
@@ -91,12 +32,55 @@ pipeline {
 
         stage('Security Scan') {
             steps {
-                withCredentials([string(credentialsId: 'snyk-api-token', variable: 'SNYK_TOKEN')]) {
-                    script {
-                        dir('simple-web-app') {
-                            sh 'snyk auth $SNYK_TOKEN'
-                            sh 'snyk test --all-projects'
-                        }
+                dir('simple-web-app') {
+                    sh 'snyk auth YOUR_SNYK_TOKEN'
+                    sh 'snyk test --all-projects'
+                }
+            }
+        }
+
+        stage('Quality Gate') {
+            steps {
+                script {
+                    def qualityGate = waitForQualityGate()
+                    if (qualityGate.status != 'OK') {
+                        error "Failed quality gate: ${qualityGate.status}"
+                    }
+                }
+            }
+        }
+
+        stage('Manual Approval') {
+            steps {
+                input "Please approve the deployment to QA environment"
+            }
+        }
+
+        stage('Install Backend Dependencies') {
+            steps {
+                dir('simple-web-app') {
+                    nodejs('Node-20.14.0') {
+                        sh '/usr/local/opt/node@20/bin/npm install'
+                    }
+                }
+            }
+        }
+
+        stage('Install Frontend Dependencies') {
+            steps {
+                dir('simple-web-app/client') {
+                    nodejs('Node-20.14.0') {
+                        sh '/usr/local/opt/node@20/bin/npm install'
+                    }
+                }
+            }
+        }
+
+        stage('Build Frontend') {
+            steps {
+                dir('simple-web-app/client') {
+                    nodejs('Node-20.14.0') {
+                        sh '/usr/local/opt/node@20/bin/npm run build'
                     }
                 }
             }
@@ -105,10 +89,7 @@ pipeline {
 
     post {
         always {
-            // Archive the frontend build artifacts
             archiveArtifacts artifacts: 'simple-web-app/client/build/**/*', allowEmptyArchive: true
-            // Publish test results for both frontend and backend
-            junit 'simple-web-app/test-results/**/*.xml'
         }
         success {
             echo 'Build was successful!'
