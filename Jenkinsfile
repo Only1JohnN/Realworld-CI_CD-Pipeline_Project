@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        PATH = "/usr/local/opt/node@20/bin:$PATH"
+        PATH = "/usr/local/opt/node@20/bin:/bin:/usr/bin:/usr/local/bin:$PATH"
     }
 
     stages {
@@ -23,8 +23,8 @@ pipeline {
         stage('Software Version') {
             steps {
                 // Checking for the software version set Globally 
-                sh 'My node Version is: /usr/local/opt/node@20/bin/node --version'
-                sh 'My npm version is: /usr/local/opt/node@20/bin/npm --version'
+                sh 'echo "My node Version is: $(/usr/local/opt/node@20/bin/node --version)"'
+                sh 'echo "My npm version is: $(/usr/local/opt/node@20/bin/npm --version)"'
             }
         }
         
