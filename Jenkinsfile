@@ -32,9 +32,13 @@ pipeline {
 
         stage('Security Scan') {
             steps {
-                dir('simple-web-app') {
-                    sh 'snyk auth YOUR_SNYK_TOKEN'
-                    sh 'snyk test --all-projects'
+                withCredentials([string(credentialsId: 'snyk-api-token', variable: 'SNYK_TOKEN')]) {
+                    script {
+                        dir('simple-web-app') {
+                            sh 'snyk auth $SNYK_TOKEN'
+                            sh 'snyk test --all-projects'
+                        }
+                    }
                 }
             }
         }
