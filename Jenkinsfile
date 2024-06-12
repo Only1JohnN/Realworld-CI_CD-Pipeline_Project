@@ -7,21 +7,29 @@ pipeline {
                 deleteDir() // Clean workspace before each build
             }
         }
-
+        
         stage('Checkout') {
             steps {
                 // Checkout the code from the current branch
                 checkout scm
-                echo 'Checked out source code from SCM' // Added echo statement
+                echo 'Checked out source code from SCM'
             }
         }
 
+        stage('Software Version') {
+            steps {
+                // Checking for the software version set Globally 
+                sh 'echo "My node Version is: $(node --version)"'
+                sh 'echo "My npm version is: $(npm --version)"'
+            }
+        }
+        
         stage('Install Backend Dependencies') {
             steps {
                 script {
                     dir('simple-web-app') {
                         // Use NodeJS plugin to set the Node version
-                        nodejs(nodeJSInstallationName: 'Node-20.14.0') {
+                        nodejs('Node-20.14.0') {
                             sh 'npm install'
                         }
                     }
@@ -33,7 +41,7 @@ pipeline {
             steps {
                 script {
                     dir('simple-web-app') {
-                        nodejs(nodeJSInstallationName: 'Node-20.14.0') {
+                        nodejs('Node-20.14.0') {
                             sh 'npm test'
                         }
                     }
@@ -45,7 +53,7 @@ pipeline {
             steps {
                 script {
                     dir('simple-web-app/client') {
-                        nodejs(nodeJSInstallationName: 'Node-20.14.0') {
+                        nodejs('Node-20.14.0') {
                             sh 'npm install'
                         }
                     }
@@ -57,7 +65,7 @@ pipeline {
             steps {
                 script {
                     dir('simple-web-app/client') {
-                        nodejs(nodeJSInstallationName: 'Node-20.14.0') {
+                        nodejs('Node-20.14.0') {
                             sh 'npm test'
                         }
                     }
@@ -69,7 +77,7 @@ pipeline {
             steps {
                 script {
                     dir('simple-web-app/client') {
-                        nodejs(nodeJSInstallationName: 'Node-20.14.0') {
+                        nodejs('Node-20.14.0') {
                             sh 'npm run build'
                         }
                     }
