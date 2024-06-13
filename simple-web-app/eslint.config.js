@@ -1,9 +1,16 @@
 module.exports = [
     {
         files: ['*.js', '*.jsx'],
-        env: {
-            node: true,
-            es6: true,
+        languageOptions: {
+            globals: {
+                node: true,
+                es6: true,
+            },
+            ecmaVersion: 2021,
+            sourceType: 'module',
+            ecmaFeatures: {
+                jsx: true,
+            },
         },
         extends: [
             'eslint:recommended',
@@ -12,13 +19,6 @@ module.exports = [
             'plugin:jsx-a11y/recommended',
         ],
         parser: '@babel/eslint-parser',
-        parserOptions: {
-            ecmaVersion: 2021,
-            sourceType: 'module',
-            ecmaFeatures: {
-                jsx: true,
-            },
-        },
         settings: {
             react: {
                 version: 'detect',
