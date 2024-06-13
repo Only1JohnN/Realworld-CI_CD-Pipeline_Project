@@ -19,14 +19,35 @@ pipeline {
             }
         }
 
-        stage('Static Code Analysis') {
+        stage('Install Dependencies') {
             steps {
                 dir('simple-web-app') {
                     nodejs('Node-20.14.0') {
                         sh '/usr/local/opt/node@20/bin/npm install'
-                        sh '/usr/local/opt/node@20/bin/npx eslint .'
+                        sh '/usr/local/opt/node@20/bin/npm install react-scripts@latest'
+                        sh '/usr/local/opt/node@20/bin/npm install nth-check@2.0.1 --save-dev'
+                        sh '/usr/local/opt/node@20/bin/npm install postcss@8.4.31 --save-dev'
+                        sh '/usr/local/opt/node@20/bin/npm install serialize-javascript@6.0.2 --save-dev'
+                        sh '/usr/local/opt/node@20/bin/npm update'
                     }
                 }
+            }
+        }
+
+        // stage('Static Code Analysis') {
+        //     steps {
+        //         dir('simple-web-app') {
+        //             nodejs('Node-20.14.0') {
+        //                 sh '/usr/local/opt/node@20/bin/npm install'
+        //                 //sh '/usr/local/opt/node@20/bin/npx eslint .'
+        //             }
+        //         }
+        //     }
+        // }
+
+        stage('Install Snyk CLI') {
+            steps {
+                sh '/usr/local/opt/node@20/bin/npm install -g snyk'
             }
         }
 
