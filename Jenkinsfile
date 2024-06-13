@@ -2,7 +2,7 @@ pipeline {
     agent any
     
     environment {
-        PATH = "/usr/local/opt/node@20/bin:$PATH"
+        PATH = "/usr/local/opt/node@20/bin:/usr/local/bin:/usr/bin:/bin"
     }
 
     stages {
@@ -24,7 +24,7 @@ pipeline {
                 dir('simple-web-app') {
                     nodejs('Node-20.14.0') {
                         sh '/usr/local/opt/node@20/bin/npm install eslint'
-                        sh '/usr/local/opt/node@20/bin/npx eslint . --ext .js'
+                        sh '/usr/local/opt/node@20/bin/npx eslint .'
                     }
                 }
             }
