@@ -23,7 +23,7 @@ pipeline {
             steps {
                 dir('simple-web-app') {
                     nodejs('Node-20.14.0') {
-                        sh '/usr/local/opt/node@20/bin/npm install eslint eslint-plugin-react eslint-plugin-react-hooks eslint-plugin-jsx-a11y @babel/eslint-parser @eslint/js @eslint/eslintrc --save-dev'
+                        sh '/usr/local/opt/node@20/bin/npm install'
                         sh '/usr/local/opt/node@20/bin/npx eslint .'
                     }
                 }

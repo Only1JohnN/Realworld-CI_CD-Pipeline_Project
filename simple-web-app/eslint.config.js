@@ -1,20 +1,17 @@
-import js from "@eslint/js";
-import react from "eslint-plugin-react/configs/recommended";
-import reactHooks from "eslint-plugin-react-hooks/configs/recommended";
-import jsxA11y from "eslint-plugin-jsx-a11y/configs/recommended";
-import { FlatCompat } from "@eslint/eslintrc";
-import path from "path";
-import { fileURLToPath } from "url";
+const js = require("@eslint/js");
+const react = require("eslint-plugin-react/configs/recommended");
+const reactHooks = require("eslint-plugin-react-hooks/configs/recommended");
+const jsxA11y = require("eslint-plugin-jsx-a11y/configs/recommended");
+const { FlatCompat } = require("@eslint/eslintrc");
+const path = require("path");
 
-// mimic CommonJS variables -- not needed if using CommonJS
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = path.resolve();
 
 const compat = new FlatCompat({
     baseDirectory: __dirname,
 });
 
-export default [
+module.exports = [
     js.configs.recommended,
     react,
     reactHooks,
