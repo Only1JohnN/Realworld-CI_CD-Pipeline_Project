@@ -23,9 +23,9 @@ pipeline {
             steps {
                 dir('simple-web-app') {
                     nodejs('Node-20.14.0') {
-                        // Install ESLint and necessary plugins explicitly
+                        // Install ESLint and necessary plugins explicitly if needed
                         sh '/usr/local/opt/node@20/bin/npm install eslint eslint-plugin-react eslint-plugin-react-hooks eslint-plugin-jsx-a11y @babel/eslint-parser --save-dev'
-                        // Run ESLint with full path to npm
+                        // Run ESLint without --ext option
                         sh '/usr/local/opt/node@20/bin/npx eslint .'
                     }
                 }
@@ -37,9 +37,7 @@ pipeline {
                 withCredentials([string(credentialsId: 'snyk-api-token', variable: 'SNYK_TOKEN')]) {
                     script {
                         dir('simple-web-app') {
-                            // Authenticate with Snyk using token
                             sh 'snyk auth $SNYK_TOKEN'
-                            // Run Snyk security tests
                             sh 'snyk test --all-projects'
                         }
                     }
@@ -50,7 +48,6 @@ pipeline {
         stage('Quality Gate') {
             steps {
                 script {
-                    // Wait for the quality gate to pass
                     def qualityGate = waitForQualityGate()
                     if (qualityGate.status != 'OK') {
                         error "Failed quality gate: ${qualityGate.status}"
@@ -61,7 +58,6 @@ pipeline {
 
         stage('Manual Approval') {
             steps {
-                // Manual approval step
                 input "Please approve the deployment to QA environment"
             }
         }
@@ -70,8 +66,7 @@ pipeline {
             steps {
                 dir('simple-web-app') {
                     nodejs('Node-20.14.0') {
-                        // Install backend dependencies
-                        sh 'npm install'
+                        sh '/usr/local/opt/node@20/bin/npm install'
                     }
                 }
             }
@@ -81,8 +76,7 @@ pipeline {
             steps {
                 dir('simple-web-app/client') {
                     nodejs('Node-20.14.0') {
-                        // Install frontend dependencies
-                        sh 'npm install'
+                        sh '/usr/local/opt/node@20/bin/npm install'
                     }
                 }
             }
@@ -92,8 +86,7 @@ pipeline {
             steps {
                 dir('simple-web-app/client') {
                     nodejs('Node-20.14.0') {
-                        // Build frontend
-                        sh 'npm run build'
+                        sh '/usr/local/opt/node@20/bin/npm run build'
                     }
                 }
             }
@@ -102,7 +95,6 @@ pipeline {
 
     post {
         always {
-            // Archive frontend build artifacts
             archiveArtifacts artifacts: 'simple-web-app/client/build/**/*', allowEmptyArchive: true
         }
         success {
