@@ -8,9 +8,11 @@ module.exports = [
             },
             ecmaVersion: 2021,
             sourceType: 'module',
-            ecmaFeatures: {
-                jsx: true,
-            },
+        },
+        plugins: {
+            react: require('eslint-plugin-react'),
+            'react-hooks': require('eslint-plugin-react-hooks'),
+            'jsx-a11y': require('eslint-plugin-jsx-a11y'),
         },
         extends: [
             'eslint:recommended',
@@ -18,7 +20,7 @@ module.exports = [
             'plugin:react-hooks/recommended',
             'plugin:jsx-a11y/recommended',
         ],
-        parser: '@babel/eslint-parser',
+        parser: require('@babel/eslint-parser'),
         settings: {
             react: {
                 version: 'detect',
