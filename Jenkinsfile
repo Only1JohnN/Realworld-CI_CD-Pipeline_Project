@@ -25,7 +25,7 @@ pipeline {
                     nodejs('Node-20.14.0') {
                         // Install ESLint and necessary plugins explicitly if needed
                         sh '/usr/local/opt/node@20/bin/npm install eslint eslint-plugin-react eslint-plugin-react-hooks eslint-plugin-jsx-a11y @babel/eslint-parser --save-dev'
-                        // Run ESLint without --ext option
+                        // Run ESLint
                         sh '/usr/local/opt/node@20/bin/npx eslint .'
                     }
                 }
