@@ -75,31 +75,31 @@ pipeline {
             }
         }
 
-        stage('Manual Approval') {
-            steps {
-                input "Please approve the deployment to QA environment"
-            }
-        }
+        // stage('Manual Approval') {
+        //     steps {
+        //         input "Please approve the deployment to QA environment"
+        //     }
+        // }
 
-        stage('Install Backend Dependencies') {
-            steps {
-                dir('simple-web-app') {
-                    nodejs('Node-20.14.0') {
-                        sh '/usr/local/opt/node@20/bin/npm install'
-                    }
-                }
-            }
-        }
+        // stage('Install Backend Dependencies') {
+        //     steps {
+        //         dir('simple-web-app') {
+        //             nodejs('Node-20.14.0') {
+        //                 sh '/usr/local/opt/node@20/bin/npm install'
+        //             }
+        //         }
+        //     }
+        // }
 
-        stage('Install Frontend Dependencies') {
-            steps {
-                dir('simple-web-app/client') {
-                    nodejs('Node-20.14.0') {
-                        sh '/usr/local/opt/node@20/bin/npm install'
-                    }
-                }
-            }
-        }
+        // stage('Install Frontend Dependencies') {
+        //     steps {
+        //         dir('simple-web-app/client') {
+        //             nodejs('Node-20.14.0') {
+        //                 sh '/usr/local/opt/node@20/bin/npm install'
+        //             }
+        //         }
+        //     }
+        // }
 
         stage('Build Frontend') {
             steps {
